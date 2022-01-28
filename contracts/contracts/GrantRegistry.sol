@@ -49,7 +49,7 @@ contract GrantRegistry {
   /// #if_succeeds _owner != address(0);
   /// #if_succeeds grants[old(grantCount)].owner == _owner;
   /// #if_succeeds grants[old(grantCount)].payee == _payee;
-  /// #if_succeeds grants[old(grantCount)].metaPtr == string(_metaPtr);
+  /// if_succeeds grants[old(grantCount)].metaPtr == string(_metaPtr);
   function createGrant(
     address _owner,
     address _payee,
