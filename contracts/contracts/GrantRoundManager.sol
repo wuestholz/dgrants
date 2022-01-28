@@ -148,13 +148,13 @@ contract GrantRoundManager is SwapRouter {
    * @param _donations Array of donations that will be executed
    */
   /// #if_succeeds {:msg "All donations have a valid  grant id"}
-  /// forall(Donation i in _donations) _donations[i].grantId < registry.grantCount();
+  /// forall(uint i in _donations) _donations[i].grantId < registry.grantCount();
   /// #if_succeeds {:msg "All rounds being donated to are active"}
-  /// forall(Donation i in _donations) forall(uint ri in _donations[i].rounds) _donations[i][ri].isActive();
+  /// forall(uint i in _donations) forall(uint ri in _donations[i].rounds) _donations[i][ri].isActive();
   /// #if_succeeds {:msg "All rounds being donated to are connected to the right registry"}
-  /// forall(Donation i in _donations) forall(uint ri in _donations[i].rounds) _donations[i][ri].registry() == registry;
+  /// forall(uint i in _donations) forall(uint ri in _donations[i].rounds) _donations[i][ri].registry() == registry;
   /// #if_succeeds {:msg "All rounds being donated to are eusing the right token"}
-  /// forall(Donation i in _donations) forall(uint ri in _donations[i].rounds) donationToken == _donations[i][ri].donationToken();
+  /// forall(uint i in _donations) forall(uint ri in _donations[i].rounds) donationToken == _donations[i][ri].donationToken();
   function _validateDonations(Donation[] calldata _donations) internal {
     // TODO consider moving this to the section where we already loop through donations in case that saves a lot of
     // gas. Leaving it here for now to improve readability
