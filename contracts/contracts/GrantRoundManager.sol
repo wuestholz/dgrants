@@ -150,7 +150,7 @@ contract GrantRoundManager is SwapRouter {
   /// #if_succeeds {:msg "All donations have a valid  grant id"}
   /// forall(uint i in _donations) _donations[i].grantId < registry.grantCount();
   /// #if_succeeds {:msg "All rounds being donated to are active"}
-  /// forall(uint i in _donations) (forall(uint ri in _donations[i].rounds) _donations[i][ri].isActive());
+  /// forall(uint i in _donations) (let donation := _donations[i] in (let rounds := donation.rounds in forall(uint ri in rounds) rounds[ri].isActive()));
   /// #if_succeeds {:msg "All rounds being donated to are connected to the right registry"}
   /// forall(uint i in _donations) (forall(uint ri in _donations[i].rounds) _donations[i][ri].registry() == registry);
   /// #if_succeeds {:msg "All rounds being donated to are eusing the right token"}
