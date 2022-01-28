@@ -129,7 +129,7 @@ contract GrantRoundManager is SwapRouter {
     // Main logic
     _validateDonations(_donations);
     _executeDonationSwaps(_swaps, _deadline);
-    ///#assert forall(uint i in _swaps) (let t := IERC20(_swaps[i].path.toAddress(0)) in forall (uint ratio in donationRatios[t]) ratio == WAD);
+    ///#assert forall(uint i in _swaps) (let t := IERC20(_swaps[i].path.toAddress(0)) in donationRatios[t] == WAD);
     _transferDonations(_donations);
 
     // Clear storage for refunds (this is set in _executeDonationSwaps)
