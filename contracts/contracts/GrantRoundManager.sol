@@ -114,7 +114,7 @@ contract GrantRoundManager is SwapRouter {
   /// #if_succeeds {:msg "No donation tokens should get stuck in this contract"}
   /// donationToken.balanceOf(address(this)) == old(donationToken.balanceOf(address(this)));
   /// if_succeeds {:msg "None of the input tokens should get stuck in this contract"}
-  /// #forall(uint i in _swaps)
+  /// forall(uint i in _swaps)
   /// let _tokenIn := IERC20(_swaps[i].path.toAddress(0)) in
   /// _tokenIn.balanceOf(address(this)) == old(_tokenIn.balanceOf(address(this)));
   /// #if_succeeds {:msg "The swap outputs should be empty after each donation"}
