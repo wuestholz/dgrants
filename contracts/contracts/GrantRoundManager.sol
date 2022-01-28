@@ -114,8 +114,8 @@ contract GrantRoundManager is SwapRouter {
   /// #if_succeeds {:msg "No donation tokens should get stuck in this contract"}
   /// donationToken.balanceOf(address(this)) == old(donationToken.balanceOf(address(this)));
   /// if_succeeds {:msg "None of the input tokens should get stuck in this contract"}
-  /// forall(SwapSummary summary in _swaps)
-  /// let _tokenIn := IERC20(summary.path.toAddress(0)) in
+  /// #forall(uint i in _swaps)
+  /// let _tokenIn := IERC20(_swaps[i].path.toAddress(0)) in
   /// _tokenIn.balanceOf(address(this)) == old(_tokenIn.balanceOf(address(this)));
   /// #if_succeeds {:msg "The swap outputs should be empty after each donation"}
   /// unchecked_sum(swapOutputs) == 0;
@@ -129,7 +129,7 @@ contract GrantRoundManager is SwapRouter {
     // Main logic
     _validateDonations(_donations);
     _executeDonationSwaps(_swaps, _deadline);
-    ///assert forall (uint ratio in donationRatios[IERC20(_swaps[i].path.toAddress(0))]) ratio == WAD;
+    ///assert forall (uint ratio in donationRatios[_tokenIn]) ratio == WAD;
     _transferDonations(_donations);
 
     // Clear storage for refunds (this is set in _executeDonationSwaps)
@@ -148,13 +148,13 @@ contract GrantRoundManager is SwapRouter {
    * @param _donations Array of donations that will be executed
    */
   /// #if_succeeds {:msg "All donations have a valid  grant id"}
-  /// forall(Donation donation in _donations) donation.grantId < registry.grantCount();
+  /// forall(Donation i in _donations) _donations[i].grantId < registry.grantCount();
   /// #if_succeeds {:msg "All rounds being donated to are active"}
-  /// forall(Donation donation in _donations) forall(GrantRound round in donation.rounds) round.isActive();
+  /// forall(Donation i in _donations) forall(uint ri in _donations[i].rounds) _donations[i][ri].isActive();
   /// #if_succeeds {:msg "All rounds being donated to are connected to the right registry"}
-  /// forall(Donation donation in _donations) forall(GrantRound round in donation.rounds) round.registry() == registry;
+  /// forall(Donation i in _donations) forall(uint ri in _donations[i].rounds) _donations[i][ri].registry() == registry;
   /// #if_succeeds {:msg "All rounds being donated to are eusing the right token"}
-  /// forall(Donation donation in _donations) forall(GrantRound round in donation.rounds) donationToken == round.donationToken();
+  /// forall(Donation i in _donations) forall(uint ri in _donations[i].rounds) donationToken == _donations[i][ri].donationToken();
   function _validateDonations(Donation[] calldata _donations) internal {
     // TODO consider moving this to the section where we already loop through donations in case that saves a lot of
     // gas. Leaving it here for now to improve readability
