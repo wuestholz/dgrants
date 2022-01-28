@@ -113,14 +113,14 @@ contract GrantRoundManager is SwapRouter {
    */
   /// #if_succeeds {:msg "No donation tokens should get stuck in this contract"}
   /// donationToken.balanceOf(address(this)) == old(donationToken.balanceOf(address(this)));
-  /// #if_succeeds {:msg "None of the input tokens should get stuck in this contract"}
+  /// if_succeeds {:msg "None of the input tokens should get stuck in this contract"}
   /// forall(SwapSummary summary in _swaps)
   /// let _tokenIn := IERC20(summary.path.toAddress(0)) in
   /// _tokenIn.balanceOf(address(this)) == old(_tokenIn.balanceOf(address(this)));
   /// #if_succeeds {:msg "The swap outputs should be empty after each donation"}
-  /// unchecked_sum(swapOutputs) = 0;
+  /// unchecked_sum(swapOutputs) == 0;
   /// #if_succeeds {:msg "The donation ratios should bee empty after each donations"}
-  /// unchecked_sum(donationRatios) = 0;
+  /// unchecked_sum(donationRatios) == 0;
   function donate(
     SwapSummary[] calldata _swaps,
     uint256 _deadline,
@@ -129,7 +129,7 @@ contract GrantRoundManager is SwapRouter {
     // Main logic
     _validateDonations(_donations);
     _executeDonationSwaps(_swaps, _deadline);
-    ///#assert forall (uint ratio in donationRatios[_tokenIn]) ratio == WAD;
+    ///assert forall (uint ratio in donationRatios[IERC20(_swaps[i].path.toAddress(0))]) ratio == WAD;
     _transferDonations(_donations);
 
     // Clear storage for refunds (this is set in _executeDonationSwaps)
@@ -224,7 +224,7 @@ contract GrantRoundManager is SwapRouter {
    */
   /// #if_succeeds {:msg "Each donation gets the payee at least their ratio of tokens"}
   /// forall(Donation donation in _donations)
-  /// let recipient = registry.getGrantPayee(donation.grantId) in
+  /// let recipient := registry.getGrantPayee(donation.grantId) in
   /// let donationAmount := swapOutputs[donation.token] * donation.ratio / WAD in
   /// old(donation.token.balanceOf(recipient)) + donationAmount >= donation.token.balanceOf(recipient);
   /// #if_succeeds {:msg "Each donation has a unique grant, token tuple"}

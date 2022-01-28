@@ -53,7 +53,7 @@ contract GrantRound {
    * @param _endTime Unix timestamp of the end of the round
    * @param _metaPtr URL pointing to the grant round metadata
    */
-  ///#if_succeeds {:msg "The payout admin can't be set to 0"} payoutAdmin != 0;
+  ///#if_succeeds {:msg "The payout admin can't be set to 0"} payoutAdmin != address(0);
   constructor(
     address _metadataAdmin,
     address _payoutAdmin,
