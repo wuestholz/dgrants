@@ -152,9 +152,9 @@ contract GrantRoundManager is SwapRouter {
   /// #if_succeeds {:msg "All rounds being donated to are active"}
   /// forall(uint i in _donations) (let donation := _donations[i] in (let rounds := donation.rounds in forall(uint ri in rounds) rounds[ri].isActive()));
   /// #if_succeeds {:msg "All rounds being donated to are connected to the right registry"}
-  /// forall(uint i in _donations) (forall(uint ri in _donations[i].rounds) _donations[i][ri].registry() == registry);
+  /// forall(uint i in _donations) (let donation := _donations[i] in (let rounds := donation.rounds in forall(uint ri in rounds) rounds[ri].registry() == registry));
   /// #if_succeeds {:msg "All rounds being donated to are eusing the right token"}
-  /// forall(uint i in _donations) (forall(uint ri in _donations[i].rounds) donationToken == _donations[i][ri].donationToken());
+  /// forall(uint i in _donations) (let donation := _donations[i] in (let rounds := donation.rounds in forall(uint ri in rounds) rounds[ri].donationToken() == donationToken));
   function _validateDonations(Donation[] calldata _donations) internal {
     // TODO consider moving this to the section where we already loop through donations in case that saves a lot of
     // gas. Leaving it here for now to improve readability
