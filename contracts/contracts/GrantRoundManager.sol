@@ -223,7 +223,8 @@ contract GrantRoundManager is SwapRouter {
    * @param _donations Array of donations to execute
    */
   /// #if_succeeds {:msg "Each donation gets the payee at least their ratio of tokens"}
-  /// forall(Donation donation in _donations)
+  /// forall(uint i in _donations)
+  /// let donation := _donations[i] in
   /// let recipient := registry.getGrantPayee(donation.grantId) in
   /// let donationAmount := swapOutputs[donation.token] * donation.ratio / WAD in
   /// old(donation.token.balanceOf(recipient)) + donationAmount >= donation.token.balanceOf(recipient);
