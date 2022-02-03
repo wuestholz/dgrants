@@ -222,7 +222,7 @@ contract GrantRoundManager is SwapRouter {
    * @dev Core donation logic that transfers funds to grants
    * @param _donations Array of donations to execute
    */
-  /// #if_succeeds_disabled {:msg "Each donation gets the payee at least their ratio of tokens"}
+  /// #disabled_if_succeeds {:msg "Each donation gets the payee at least their ratio of tokens"}
   /// forall(uint i in _donations)
   /// let donation := _donations[i] in
   /// let recipient := registry.getGrantPayee(donation.grantId) in
